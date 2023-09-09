@@ -1,14 +1,19 @@
-from fastapi import FastAPI;
+from fastapi import FastAPI
 from src.database import engine
 from src.config import config
-from src import model
+from src.model import user
+from src.router import user_router
 import uvicorn
 
 
-model.Base.metadata.create_all(bind=engine)
+user.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
+
+
+app.include_router(user_router.router)
+
 
 @app.get("/hello/{name}")
 async def root(name):

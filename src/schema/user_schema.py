@@ -9,8 +9,8 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserModel(UserBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
