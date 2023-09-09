@@ -1,5 +1,12 @@
 from fastapi import FastAPI;
+from src.database import engine
+from src.config import config
+from src import model
 import uvicorn
+
+
+model.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
 
@@ -9,4 +16,4 @@ async def root(name):
     return { "message": f"Hello {my_name}"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', port=8080)
+    uvicorn.run(app, host=config.host, port=config.port)
