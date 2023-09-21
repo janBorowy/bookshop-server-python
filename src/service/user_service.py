@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from ..model.user import User
-from ..security.login_security import hash, verify_password, oauth2_scheme, get_logged_user
+from ..security.login_security import hash, verify_password, get_logged_user
 from ..schema.user_schema import UserCreate, UserLogin
 from fastapi import HTTPException, status, Depends
 from typing import Annotated

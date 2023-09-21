@@ -1,10 +1,11 @@
 from ..database import Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class User(Base):
     __tablename__ = "bookshop_user"
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    email: Mapped[str] = mapped_column(unique=True, index=True)
+    hashed_password: Mapped[str]
