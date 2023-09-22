@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from src.database import get_db
 from src.model.user import User
 
-from src.schema.author_schema import AuthorModel, AuthorCreate
+from src.schema.author_schema import AuthorModel, AuthorCreate, AuthorPatch
 from src.service import author_service, user_service
 
 
@@ -36,3 +36,12 @@ def get_author(
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[User, Depends(user_service.get_current_user)]):
     return author_service.get_author(db, author_id)
+
+
+@router.patch("/", response_model=AuthorModel)
+def patch_author(
+    author: AuthorPatch,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(user_service.get_current_user)]
+):
+    return author_service.update_author(db, author)

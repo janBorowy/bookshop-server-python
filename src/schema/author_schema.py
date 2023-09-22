@@ -6,6 +6,12 @@ class AuthorBase(BaseModel):
     lastname: str
 
 
+class AuthorPatch(BaseModel):
+    id: int
+    name: str | None = None
+    lastname: str | None = None
+
+
 class AuthorCreate(AuthorBase):
     pass
 

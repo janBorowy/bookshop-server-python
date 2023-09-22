@@ -3,11 +3,12 @@ from sqlalchemy.orm import Session
 from src.exception.service_exceptions import NotAllAuthorsExist
 
 from src.model.bookshop_model import Author
-from src.schema.author_schema import AuthorCreate
+from src.schema.author_schema import AuthorCreate, AuthorPatch
 
 
 def get_author(db: Session, author_id: int) -> Author:
     return db.query(Author).filter(Author.id == author_id).first()
+
 
 def create_author(db: Session, author: AuthorCreate) -> Author:
     db_author = Author(
@@ -20,6 +21,7 @@ def create_author(db: Session, author: AuthorCreate) -> Author:
     db.refresh(db_author)
     return db_author
 
+
 def delete_author(db: Session, author_id: int):
     author = get_author(db, author_id)
     if author is None:
@@ -29,7 +31,8 @@ def delete_author(db: Session, author_id: int):
     db.delete(author)
     db.commit()
 
-def fetch_authors(db, author_ids: list[int]):
+
+def fetch_authors(db: Session, author_ids: list[int]):
     authors = []
     for id in author_ids:
         found_author = get_author(db, id)
@@ -37,3 +40,13 @@ def fetch_authors(db, author_ids: list[int]):
             raise NotAllAuthorsExist("not all given authors exist")
         authors.append(found_author)
     return authors
+
+
+def update_author(db: Session, author: AuthorPatch):
+    author_id = author.id
+    db_author = get_author(db, author_id)
+    if author.name is not None: db_author.name = author.name
+    if author.lastname is not None: db_author.lastname = author.lastname
+    
+    db.commit()
+    return db_author
