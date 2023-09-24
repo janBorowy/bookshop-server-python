@@ -35,10 +35,7 @@ def get_author(
     author_id: int,
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[User, Depends(user_service.get_current_user)]):
-    found_author = author_service.get_author(db, author_id)
-    if found_author is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="author not found")
-    return found_author
+    return author_service.get_author(db, author_id)
 
 
 @router.patch("/", response_model=AuthorModel)

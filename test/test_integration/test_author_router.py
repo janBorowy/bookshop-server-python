@@ -14,7 +14,7 @@ class TestAuthorCreate:
         result_body = result.json()
 
         assert result.status_code == 200
-        assert result_body["id"] == 1
+        assert result_body["id"] == 3
         assert result_body["name"] == "Andrzej"
         assert result_body["lastname"] == "Sapkowski"
 
@@ -46,7 +46,7 @@ class TestAuthorPatch:
     def test_valid_input(self, client: TestClient):
         body = {
             "name": "Janusz",
-            "id": 1
+            "id": 3
         }
 
         result = client.patch("/author/", json=body)
@@ -55,12 +55,12 @@ class TestAuthorPatch:
         assert result.status_code == 200
         assert result_body["name"] == "Janusz"
         assert result_body["lastname"] == "Sapkowski"
-        assert result_body["id"] == 1
+        assert result_body["id"] == 3
 
     def test_invalid_attribute(self, client: TestClient):
         body = {
             "name": "J",
-            "id": 1
+            "id": 3
         }
 
         result = client.patch("/author/", json=body)
@@ -69,7 +69,7 @@ class TestAuthorPatch:
 
     def test_author_not_found(self, client: TestClient):
         body = {
-            "id": 2
+            "id": 4
         }
 
         result = client.patch("/author/", json=body)
@@ -80,7 +80,7 @@ class TestAuthorPatch:
 class TestAuthorGet:
 
     def test_successful(self, client: TestClient):
-        result = client.get("/author/1")
+        result = client.get("/author/3")
         result_body = result.json()
 
         assert result.status_code == 200
@@ -88,7 +88,7 @@ class TestAuthorGet:
         assert result_body["lastname"] == "Sapkowski"
 
     def test_not_found(self, client: TestClient):
-        result = client.get("/author/2")
+        result = client.get("/author/4")
 
         assert result.status_code == 404
 
@@ -97,12 +97,12 @@ class TestAuthorDelete:
 
     def test_successful(self, client: TestClient):
 
-        result = client.delete("/author/1")
+        result = client.delete("/author/3")
 
         assert result.status_code == 200
 
     def test_not_found(self, client: TestClient):
 
-        result = client.delete("/author/1")
+        result = client.delete("/author/3")
 
         assert result.status_code == 404

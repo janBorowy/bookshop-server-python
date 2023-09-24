@@ -1,23 +1,23 @@
 from fastapi import HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.orm import Session, selectinload
-from src.model.bookshop_model import Author, Book
+from sqlalchemy.orm import Session
+from src.model.bookshop_model import Book
 
 from src.schema.book_schema import BookCreate
 from src.service import author_service
 
 
-def get_book(db: Session, book_isbn: int):
+def get_book(db: Session, book_isbn: str):
     found_book = db.query(Book).filter(Book.isbn == book_isbn).first()
     if found_book is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="no book with given isbn")
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+                            detail="no book with given isbn found")
     return found_book
 
 
 def create_book(db: Session, book: BookCreate) -> Book:
-    
+
     authors = author_service.fetch_authors(db, book.author_ids)
-    
+
     db_book = Book(
         isbn=book.isbn,
         title=book.title

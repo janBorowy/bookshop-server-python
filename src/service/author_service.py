@@ -7,7 +7,11 @@ from src.schema.author_schema import AuthorCreate, AuthorPatch
 
 
 def get_author(db: Session, author_id: int) -> Author:
-    return db.query(Author).filter(Author.id == author_id).first()
+    found_author = db.query(Author).filter(Author.id == author_id).first()
+    if found_author is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+                            detail="author not found")
+    return found_author
 
 
 def create_author(db: Session, author: AuthorCreate) -> Author:

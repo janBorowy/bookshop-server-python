@@ -4,6 +4,7 @@ from main import app
 from src.database import get_db
 from src.model.user import User
 from src.security.login_security import hash
+from test.test_integration.testing_data import test_data
 
 
 SQLALCHEMY_DATABASE_URL = "sqlite://"
@@ -37,5 +38,7 @@ def get_test_user():
 def populate_with_testing_data():
     db = TestingSessionLocal()
     db.add(test_user)
-
+    for obj in test_data:
+        print(f"saving object {obj}")
+        db.add(obj)
     db.commit()

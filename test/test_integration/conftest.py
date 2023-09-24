@@ -17,7 +17,7 @@ def get_database_connection():
     return get_db_override()
 
 
-@fixture(scope="module", autouse=True)
+@fixture(scope="session", autouse=True)
 def reload_database_state():
     Base.metadata.create_all(bind=engine)
     populate_with_testing_data()
