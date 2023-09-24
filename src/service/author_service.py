@@ -45,8 +45,13 @@ def fetch_authors(db: Session, author_ids: list[int]):
 def update_author(db: Session, author: AuthorPatch):
     author_id = author.id
     db_author = get_author(db, author_id)
+
+    if db_author is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+                            detail="author not found")
+
     if author.name is not None: db_author.name = author.name
     if author.lastname is not None: db_author.lastname = author.lastname
-    
+
     db.commit()
     return db_author

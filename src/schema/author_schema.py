@@ -1,15 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class AuthorBase(BaseModel):
-    name: str
-    lastname: str
+    name: constr(min_length=3)
+    lastname: constr(min_length=3)
 
 
 class AuthorPatch(BaseModel):
     id: int
-    name: str | None = None
-    lastname: str | None = None
+    name: constr(min_length=3) | None = None
+    lastname: constr(min_length=3) | None = None
 
 
 class AuthorCreate(AuthorBase):

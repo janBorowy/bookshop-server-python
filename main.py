@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from src.database import engine
 from src.config import config
 from src.model import bookshop_model, user

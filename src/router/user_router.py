@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.post("/", response_model=UserModel)
 def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
-    db_user = user_service.get_user_by_email(db, user.email)
+    db_user = user_service.get_user_by_email(db, user.email.email)
     if db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already in use")
     return user_service.create_user(db, user)

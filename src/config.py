@@ -1,16 +1,24 @@
 from os import environ
+from dotenv import load_dotenv
+
+
+load_dotenv(dotenv_path=".env")
+
 
 def get_env(key: str):
     return environ.get(key)
 
+
 class Config:
-    def __init__(self, db_name="", db_username="", db_password="", db_host="", port="", host="") -> None:
+    def __init__(self, db_name="", db_username="", db_password="", db_host="",
+                 port="", host="") -> None:
         self.db_name = db_name
         self.db_username = db_username
         self.db_password = db_password
         self.db_host = db_host
         self.port = int(port)
         self.host = host
+
 
 config = Config(
     db_name=get_env("DB_NAME"),
