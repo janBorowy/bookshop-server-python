@@ -1,6 +1,6 @@
 import logging
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query
 from src.model.bookshop_model import Book
 
 from src.schema.book_schema import BookCreate
@@ -74,3 +74,17 @@ def book_to_dict_representation(created_book: Book):
         "authors": created_book.authors,
         "publisher": created_book.publisher
     }
+
+
+def get_search_by_title_query(db: Session, prefix: str):
+    return db.query(Book).filter(Book.title.like(f"{prefix}%"))
+
+
+def paginate_query(query: Query, skip: int, limit: int) -> Query:
+    return query.offset(skip).limit(limit)
+
+
+def search_by_title(db: Session, prefix: str, skip: int, limit: int):
+    query = get_search_by_title_query(db, prefix)
+
+    return paginate_query(query, skip, limit).all()

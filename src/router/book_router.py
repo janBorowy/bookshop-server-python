@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from src.database import get_db
 from src.exception.service_exceptions import NotAllAuthorsExist
+from src.model.bookshop_model import Book
 from src.model.user import User
 from src.schema.book_schema import BookCreate, BookModel
 from src.service import book_service
@@ -27,6 +28,17 @@ def create_book(
     except NotAllAuthorsExist as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=e)
     return book_service.book_to_dict_representation(created_book)
+
+
+@router.get("/search-by-title", response_model=list[BookModel])
+def search_for_book_by_title(
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+    phrase: str = "",
+    skip: int = 0,
+    limit: int = 10
+):
+    return book_service.search_by_title(db, phrase, skip, limit)
 
 
 @router.get("/{book_isbn}", response_model=BookModel)
