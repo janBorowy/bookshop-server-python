@@ -2,9 +2,6 @@
 book:
     - categories
 
-publisher:
-    - name
-+ router and service
-
 ideas:
 - add book reviews
+- add selling functionality
