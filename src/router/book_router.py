@@ -37,7 +37,7 @@ def get_book(book_isbn: str,
 
 
 @router.put("/", response_model=BookModel)
-def patch_book(
+def put_book(
     book: BookCreate,
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[User, Depends(get_current_user)]):
