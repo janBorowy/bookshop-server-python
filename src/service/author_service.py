@@ -54,8 +54,10 @@ def update_author(db: Session, author: AuthorPatch):
         raise HTTPException(status.HTTP_404_NOT_FOUND,
                             detail="author not found")
 
-    if author.name is not None: db_author.name = author.name
-    if author.lastname is not None: db_author.lastname = author.lastname
+    if author.name is not None:
+        db_author.name = author.name
+    if author.lastname is not None:
+        db_author.lastname = author.lastname
 
     db.commit()
     return db_author
