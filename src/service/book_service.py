@@ -1,3 +1,4 @@
+import logging
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from src.model.bookshop_model import Book
@@ -25,7 +26,14 @@ def create_book(db: Session, book: BookCreate) -> Book:
 
     db_book = Book(
         isbn=book.isbn,
-        title=book.title
+        title=book.title,
+        published_date=book.published_date,
+        cover_type=book.cover_type,
+        number_of_pages=book.number_of_pages,
+        dimensions=book.dimensions,
+        price_in_us_cents=book.price_in_us_cents,
+        publisher_price_in_us_cents=book.publisher_price_in_us_cents,
+        cover_url=book.cover_url
     )
 
     db_book.authors = authors
@@ -34,9 +42,10 @@ def create_book(db: Session, book: BookCreate) -> Book:
         db.commit()
         db.refresh(db_book)
         return db_book
-    except IntegrityError:
+    except IntegrityError as e:
+        logging.warning(e)
         raise HTTPException(status.HTTP_403_FORBIDDEN,
-                            detail="book with such isbn already exists")
+                            detail="Invalid book input")
 
 
 def get_book_authors(db: Session, book_isbn: str):

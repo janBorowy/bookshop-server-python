@@ -16,7 +16,18 @@ class TestBookGet:
                     "lastname": "Sapkowski",
                     "id": 1
                 },
-            ]
+            ],
+            "published_date": "2014-01-01",
+            "publisher": {
+                "name": "SuperNowa",
+                "id": 1
+            },
+            "cover_type": "paperback",
+            "number_of_pages": 332,
+            "dimensions": "4.96x1.06x7.68in",
+            "price_in_us_cents": 999,
+            "publisher_price_in_us_cents": 1499,
+            "cover_url": "https://m.media-amazon.com/images/I/71lNI3qT32L._SY466_.jpg"
         }
 
     def test_not_found(self, client: TestClient):
@@ -42,19 +53,31 @@ class TestBookPost:
             "isbn": "0812540115",
             "author_ids": [
                 author_result_body["id"]
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999
         }
 
         result = client.post("/book/", json=body)
         result_body = result.json()
 
+        assert result.status_code == 200
         assert result_body == {
             "title": "The Wheel of Time",
             "isbn": "0812540115",
             "authors": [{
                 **author_create_body,
                 "id": author_result_body["id"]
-            }]
+            }],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999,
+            "number_of_pages": None,
+            "dimensions": None,
+            "price_in_us_cents": None,
+            "cover_url": None,
+            "publisher": None,
         }
 
     def test_no_isbn(self, client: TestClient):
@@ -83,7 +106,10 @@ class TestBookPost:
             "isbn": "0812540115",
             "author_ids": [
                 5
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999
         }
 
         result = client.post("/book/", json=body)
@@ -96,7 +122,10 @@ class TestBookPost:
             "title": "Wiedźmin: Ostatnie psioczenie",
             "author_ids": [
                 1
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999
         }
 
         result = client.post("/book/", json=body)
@@ -112,7 +141,10 @@ class TestBookPut:
             "isbn": "0812540115",
             "author_ids": [
                 1
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999
         }
 
         result = client.put("/book/", json=body)
@@ -127,7 +159,15 @@ class TestBookPut:
                     "lastname": "Sapkowski",
                     "id": 1
                 }
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999,
+            "number_of_pages": None,
+            "dimensions": None,
+            "price_in_us_cents": None,
+            "cover_url": None,
+            "publisher": None,
         }
 
     def test_new_book(self, client: TestClient):
@@ -136,7 +176,10 @@ class TestBookPut:
             "isbn": "1234567890",
             "author_ids": [
                 1
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999
         }
 
         result = client.put("/book/", json=body)
@@ -151,7 +194,15 @@ class TestBookPut:
                     "lastname": "Sapkowski",
                     "id": 1
                 }
-            ]
+            ],
+            "published_date": "1990-01-15",
+            "cover_type": "paperback",
+            "publisher_price_in_us_cents": 999,
+            "number_of_pages": None,
+            "dimensions": None,
+            "price_in_us_cents": None,
+            "cover_url": None,
+            "publisher": None,
         }
 
 

@@ -1,14 +1,10 @@
 1. add to model:
 book:
-    - published date
-    - publisher
-    - cover type
-    - number of pages
     - categories
-    - dimensions
-    - price
-    - publisher's price
 
+publisher:
+    - name
++ router and service
 
 ideas:
 - add book reviews
