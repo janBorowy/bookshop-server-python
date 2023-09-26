@@ -35,9 +35,10 @@ def verify_password(plain_password: str, hashed_password: str):
 def create_access_token(data: dict, expiration_time: timedelta):
     to_encode = data.copy()
     expire = datetime.utcnow() + expiration_time
-    to_encode.update({ "exp": expire} )
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 token_router = APIRouter(
     prefix="",

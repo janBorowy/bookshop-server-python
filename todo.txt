@@ -5,3 +5,6 @@ book:
 ideas:
 - add book reviews
 - add selling functionality
+
+fix:
+    - connect publisher with book after creation

@@ -1,14 +1,13 @@
 from fastapi import FastAPI
-from src.database import engine
+from src.database import engine, Base
 from src.config import config
-from src.model import bookshop_model, user
 from src.router import author_router, book_router, publisher_router, \
     user_router
 from src.security.login_security import token_router
 import uvicorn
 
-bookshop_model.Base.metadata.create_all(bind=engine)
-user.Base.metadata.create_all(bind=engine)
+
+Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
