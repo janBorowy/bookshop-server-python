@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from src.model.bookshop_model import Book
 
 from src.schema.book_schema import BookCreate
-from src.service import author_service
+from src.service import author_service, publisher_service
 from sqlalchemy.exc import IntegrityError
 
 
@@ -23,6 +23,8 @@ def get_book_ignore_not_found(db: Session, book_isbn: str) -> Book | None:
 def create_book(db: Session, book: BookCreate) -> Book:
 
     authors = author_service.fetch_authors(db, book.author_ids)
+    publisher = publisher_service. \
+        get_publisher_ignore_not_found(db, book.publisher_id)
 
     db_book = Book(
         isbn=book.isbn,
@@ -33,7 +35,8 @@ def create_book(db: Session, book: BookCreate) -> Book:
         dimensions=book.dimensions,
         price_in_us_cents=book.price_in_us_cents,
         publisher_price_in_us_cents=book.publisher_price_in_us_cents,
-        cover_url=book.cover_url
+        cover_url=book.cover_url,
+        publisher=publisher
     )
 
     db_book.authors = authors
@@ -68,5 +71,6 @@ def replace_book(db: Session, book: BookCreate) -> Book:
 def book_to_dict_representation(created_book: Book):
     return {
         **(created_book.__dict__),
-        "authors": created_book.authors
+        "authors": created_book.authors,
+        "publisher": created_book.publisher
     }
