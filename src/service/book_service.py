@@ -62,7 +62,6 @@ def replace_book(db: Session, book: BookCreate) -> Book:
     found_book = get_book_ignore_not_found(db, book_isbn=book.isbn)
     if found_book is not None:
         db.delete(found_book)
-        db.commit()
     return create_book(db, book)
 
 

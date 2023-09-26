@@ -1,10 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class PublisherBase(BaseModel):
+    name: constr(min_length=3, max_length=200)
+
+
+class PublisherCreate(PublisherBase):
+    pass
+
+
+class PublisherPut(PublisherBase):
     id: int
-    name: str
 
 
 class PublisherModel(PublisherBase):
-    pass
+    id: int
