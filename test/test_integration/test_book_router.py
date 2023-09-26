@@ -217,3 +217,40 @@ class TestBookDelete:
         result = client.delete("/book/0812540115")
 
         assert result.status_code == 404
+
+
+class TestSearchByTitle:
+    def test_find_one(self, client: TestClient):
+
+        result = client.get("/book/search-by-title?phrase=Wie")
+
+        assert result.status_code == 200
+        assert result.json() == [
+            {
+                "isbn": "9788375780635",
+                "title": "Wiedźmin: Ostatnie życzenie",
+                "authors": [
+                    {
+                        "name": "Andrzej",
+                        "lastname": "Sapkowski",
+                        "id": 1
+                    },
+                ],
+                "published_date": "2014-01-01",
+                "publisher": {
+                    "name": "SuperNowa",
+                    "id": 1
+                },
+                "cover_type": "paperback",
+                "number_of_pages": 332,
+                "dimensions": "4.96x1.06x7.68in",
+                "price_in_us_cents": 999,
+                "publisher_price_in_us_cents": 1499,
+                "cover_url": "https://m.media-amazon.com/images/I/71lNI3qT32L._SY466_.jpg"
+            }
+        ]
+
+    def test_find_none(self, client: TestClient):
+        result = client.get("/book/search-by-title?phrase=nonexis")
+
+        assert result.json() == []
