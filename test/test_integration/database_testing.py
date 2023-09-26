@@ -39,6 +39,5 @@ def populate_with_testing_data():
     db = TestingSessionLocal()
     db.add(test_user)
     for obj in test_data:
-        print(f"saving object {obj}")
         db.add(obj)
     db.commit()

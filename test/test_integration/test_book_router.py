@@ -57,6 +57,26 @@ class TestBookPost:
             }]
         }
 
+    def test_no_isbn(self, client: TestClient):
+        author_create_body = {
+            "name": "Robert",
+            "lastname": "Jordan"
+        }
+
+        author_result = client.post("/author/", json=author_create_body)
+        author_result_body = author_result.json()
+
+        body = {
+            "title": "The Wheel of Time",
+            "author_ids": [
+                author_result_body["id"]
+            ]
+        }
+
+        result = client.post("/book/", json=body)
+
+        result.status_code == 422
+
     def test_author_does_not_exist(self, client: TestClient):
         body = {
             "title": "The Wheel of Time",
@@ -70,8 +90,21 @@ class TestBookPost:
 
         assert result.status_code == 404
 
+    def test_already_exists(self, client: TestClient):
+        body = {
+            "isbn": "9788375780635",
+            "title": "Wiedźmin: Ostatnie psioczenie",
+            "author_ids": [
+                1
+            ]
+        }
 
-class TestBookPatch:
+        result = client.post("/book/", json=body)
+
+        assert result.status_code == 403
+
+
+class TestBookPut:
 
     def test_successful(self, client: TestClient):
         body = {
@@ -82,7 +115,7 @@ class TestBookPatch:
             ]
         }
 
-        result = client.patch("/book/", json=body)
+        result = client.put("/book/", json=body)
 
         assert result.status_code == 200
         assert result.json() == {
@@ -97,18 +130,29 @@ class TestBookPatch:
             ]
         }
 
-    def test_author_does_not_exist(self, client: TestClient):
+    def test_new_book(self, client: TestClient):
         body = {
             "title": "The Wheel of Fire",
-            "isbn": "0812540115",
+            "isbn": "1234567890",
             "author_ids": [
-                5
+                1
             ]
         }
 
-        result = client.patch("/book/", json=body)
+        result = client.put("/book/", json=body)
 
-        assert result.status_code == 404
+        assert result.status_code == 200
+        assert result.json() == {
+            "title": "The Wheel of Fire",
+            "isbn": "1234567890",
+            "authors": [
+                {
+                    "name": "Andrzej",
+                    "lastname": "Sapkowski",
+                    "id": 1
+                }
+            ]
+        }
 
 
 class TestBookDelete:

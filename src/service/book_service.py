@@ -4,14 +4,19 @@ from src.model.bookshop_model import Book
 
 from src.schema.book_schema import BookCreate
 from src.service import author_service
+from sqlalchemy.exc import IntegrityError
 
 
-def get_book(db: Session, book_isbn: str):
+def get_book(db: Session, book_isbn: str) -> Book:
     found_book = db.query(Book).filter(Book.isbn == book_isbn).first()
     if found_book is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND,
                             detail="no book with given isbn found")
     return found_book
+
+
+def get_book_ignore_not_found(db: Session, book_isbn: str) -> Book | None:
+    return db.query(Book).filter(Book.isbn == book_isbn).first()
 
 
 def create_book(db: Session, book: BookCreate) -> Book:
@@ -24,12 +29,36 @@ def create_book(db: Session, book: BookCreate) -> Book:
     )
 
     db_book.authors = authors
-
-    db.add(db_book)
-    db.commit()
-    db.refresh(db_book)
-    return db_book
+    try:
+        db.add(db_book)
+        db.commit()
+        db.refresh(db_book)
+        return db_book
+    except IntegrityError:
+        raise HTTPException(status.HTTP_403_FORBIDDEN,
+                            detail="book with such isbn already exists")
 
 
 def get_book_authors(db: Session, book_isbn: str):
     return get_book(book_isbn).authors
+
+
+def delete_book(db: Session, book_isbn: str):
+    found_book = get_book(db, book_isbn)
+    db.delete(found_book)
+    db.commit()
+
+
+def replace_book(db: Session, book: BookCreate) -> Book:
+    found_book = get_book_ignore_not_found(db, book_isbn=book.isbn)
+    if found_book is not None:
+        db.delete(found_book)
+        db.commit()
+    return create_book(db, book)
+
+
+def book_to_dict_representation(created_book: Book):
+    return {
+        **(created_book.__dict__),
+        "authors": created_book.authors
+    }
