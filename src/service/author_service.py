@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.exception.service_exceptions import NotAllAuthorsExist
 
 from src.model.bookshop_model import Author
-from src.schema.author_schema import AuthorCreate, AuthorPatch
+from src.schema.author_schema import AuthorBase, AuthorCreate, AuthorPatch
 
 
 def get_author(db: Session, author_id: int) -> Author:
@@ -18,7 +18,8 @@ def create_author(db: Session, author: AuthorCreate) -> Author:
     db_author = Author(
         name=author.name,
         lastname=author.lastname,
-        books=[]
+        books=[],
+        portrait_url=get_author_portrait_url_string_if_exists(author)
     )
     db.add(db_author)
     db.commit()
@@ -58,6 +59,16 @@ def update_author(db: Session, author: AuthorPatch):
         db_author.name = author.name
     if author.lastname is not None:
         db_author.lastname = author.lastname
+    if author.portrait_url is not None:
+        db_author.portrait_url = \
+            get_author_portrait_url_string_if_exists(author)
 
     db.commit()
     return db_author
+
+
+def get_author_portrait_url_string_if_exists(
+        author: AuthorBase) -> str | None:
+    if author.portrait_url is not None:
+        return str(author.portrait_url)
+    return None

@@ -14,6 +14,7 @@ class TestBookGet:
                 {
                     "name": "Andrzej",
                     "lastname": "Sapkowski",
+                    "portrait_url": "https://api.culture.pl/sites/default/files/styles/1920_auto/public/2018-06/andrzejsapkowski_en.jpg?itok=ZEZz-hGr",
                     "id": 1
                 },
             ],
@@ -42,7 +43,8 @@ class TestBookPost:
     def test_successful(self, client: TestClient):
         author_create_body = {
             "name": "Robert",
-            "lastname": "Jordan"
+            "lastname": "Jordan",
+            "portrait_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Robert_Jordan.jpg/240px-Robert_Jordan.jpg"
         }
 
         author_result = client.post("/author/", json=author_create_body)
@@ -157,6 +159,7 @@ class TestBookPut:
                 {
                     "name": "Andrzej",
                     "lastname": "Sapkowski",
+                    "portrait_url": "https://api.culture.pl/sites/default/files/styles/1920_auto/public/2018-06/andrzejsapkowski_en.jpg?itok=ZEZz-hGr",
                     "id": 1
                 }
             ],
@@ -192,6 +195,7 @@ class TestBookPut:
                 {
                     "name": "Andrzej",
                     "lastname": "Sapkowski",
+                    "portrait_url": "https://api.culture.pl/sites/default/files/styles/1920_auto/public/2018-06/andrzejsapkowski_en.jpg?itok=ZEZz-hGr",
                     "id": 1
                 }
             ],
@@ -233,6 +237,7 @@ class TestSearchByTitle:
                     {
                         "name": "Andrzej",
                         "lastname": "Sapkowski",
+                        "portrait_url": "https://api.culture.pl/sites/default/files/styles/1920_auto/public/2018-06/andrzejsapkowski_en.jpg?itok=ZEZz-hGr",
                         "id": 1
                     },
                 ],

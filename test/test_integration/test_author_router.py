@@ -7,6 +7,7 @@ class TestAuthorCreate:
         body = {
             "name": "Andrzej",
             "lastname": "Sapkowski",
+            "portrait_url": "https://i.imgur.com/piEoGdM.jpeg",
             "id": 10
         }
 
@@ -22,6 +23,7 @@ class TestAuthorCreate:
         body = {
             "name": "A",
             "lastname": "Sapkowski",
+            "portrait_url": "https://i.imgur.com/piEoGdM.jpeg",
             "id": 10
         }
 
@@ -29,10 +31,11 @@ class TestAuthorCreate:
 
         assert result.status_code == 422
 
-    def test_invalid_lastname(self, client: TestClient):
+    def test_invalid_url(self, client: TestClient):
         body = {
             "name": "Andrzej",
             "lastname": "S",
+            "portrait_url": "xd://www.funnyimage.pl",
             "id": 10
         }
 
@@ -86,6 +89,7 @@ class TestAuthorGet:
         assert result.status_code == 200
         assert result_body["name"] == "Janusz"
         assert result_body["lastname"] == "Sapkowski"
+        assert result_body["portrait_url"] == "https://i.imgur.com/piEoGdM.jpeg"
 
     def test_not_found(self, client: TestClient):
         result = client.get("/author/4")

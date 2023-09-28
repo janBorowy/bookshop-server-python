@@ -30,7 +30,7 @@ def delete_author(
     return {"message": "success"}
 
 
-@router.get("/{author_id}")
+@router.get("/{author_id}", response_model=AuthorModel)
 def get_author(
     author_id: int,
     db: Annotated[Session, Depends(get_db)],
